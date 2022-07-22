@@ -5,7 +5,7 @@ import Title from '../shared/title';
 const Frontend = (
 	{ blockProps, attributes: { counter: initialCounter, message }, children },
 ) => {
-	const [ show, setShow ] = useState( false );
+	const [ show, setShow ] = useState( true );
 	const [ counter, setCounter ] = useState( initialCounter );
 
 	return (

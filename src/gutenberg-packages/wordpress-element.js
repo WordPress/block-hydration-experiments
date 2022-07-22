@@ -2,6 +2,8 @@ import {
 	createContext,
 	useContext as useReactContext,
 	useEffect as useReactEffect,
+	useLayoutEffect as useReactLayoutEffect,
+	useRef as useReactRef,
 	useState as useReactState,
 } from '@wordpress/element';
 import { hydrate as ReactHydrate } from 'react-dom';
@@ -36,6 +38,14 @@ export const useState = ( init ) =>
 
 export const useEffect = ( ...args ) =>
 	useBlockEnvironment() !== 'save' ? useReactEffect( ...args ) : noop;
+
+export const useLayoutEffect = ( ...args ) =>
+	useBlockEnvironment() !== 'save' ? useReactLayoutEffect( ...args ) : noop;
+
+export const useRef = ( ...args ) =>
+	useBlockEnvironment() !== 'save' ?
+		useReactRef( ...args ) :
+		() => ({ current: null });
 
 export const hydrate = ( element, container, hydrationOptions ) => {
 	const { technique, media } = hydrationOptions || {};

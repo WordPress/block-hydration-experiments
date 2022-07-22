@@ -1,5 +1,11 @@
 import { matcherFromSource, pickKeys } from './utils';
-import { EnvContext, hydrate } from './wordpress-element';
+import {
+	EnvContext,
+	hydrate,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+} from './wordpress-element';
 
 // We assign `blockTypes` to window to make sure it's a global singleton.
 //
@@ -18,12 +24,24 @@ export const registerBlockType = ( name, Comp ) => {
 };
 
 const Children = ( { value, providedContext } ) => {
+	const ref = useRef();
+	useLayoutEffect( () => {
+		if ( !value ) {
+			return () => {
+				console.log( ref.current );
+				debugger;
+			};
+		}
+	}, [] );
+
 	if ( !value ) {
 		return null;
 	}
+
 	return (
 		<gutenberg-inner-blocks
 			ref={( el ) => {
+				ref.current = el;
 				if ( el !== null ) {
 					// listen for the ping from the child
 					el.addEventListener( 'gutenberg-context', ( event ) => {
@@ -81,9 +99,9 @@ class GutenbergBlock extends HTMLElement {
 				style: this.children[0].style,
 			};
 
-			const innerBlocks = this.querySelector(
-				'template.gutenberg-inner-blocks',
-			);
+			const innerBlocks = this
+				.querySelector( 'gutenberg-inner-blocks' );
+
 			const Comp = window.blockTypes.get( blockType );
 			const technique = this.getAttribute( 'data-gutenberg-hydrate' );
 			const media = this.getAttribute( 'data-gutenberg-media' );
