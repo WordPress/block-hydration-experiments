@@ -5,7 +5,7 @@ import Button from '../shared/button';
 import Title from '../shared/title';
 
 const Frontend = ({
-	blockProps,
+	blockProps: { className, style },
 	attributes: { counter: initialCounter, message },
 	children,
 }) => {
@@ -14,7 +14,10 @@ const Frontend = ({
 	return (
 		<Counter.Provider value={counter}>
 			<Theme.Provider value="cool theme">
-				<div {...blockProps}>
+				<div
+					className={`${className} ${show ? 'show' : 'hide'}`}
+					style={style}
+				>
 					<Title message={message} />
 					<Button handler={() => setShow(!show)} />
 					<button onClick={() => setCounter(counter + 1)}>
